@@ -1,12 +1,12 @@
 # defrr MCP server
 
-Revenue schedules, credits, cancellations and usage pricing for contracts, worked out by defrr's engine.
-Connect it to Claude Code and ask in plain English.
+Revenue recognition (RevRec) schedules, waterfalls, renewals, credits, cancellations and usage pricing for contracts, worked out by defrr's engine.
+Connect it to Claude Code and ask in plain English, or call it from your own code.
 Nothing you send is stored or logged.
 
 ## Connect
 
-1. Create an API key at https://defrr.com/developers/account (25 free credits).
+1. Create an API key at https://defrr.com/developers/account (40 free credits).
 2. Add the server:
 
    ```
@@ -14,7 +14,7 @@ Nothing you send is stored or logged.
      --header "Authorization: Bearer dfr_live_YOUR_KEY"
    ```
 
-3. In Claude Code, type `/mcp`. defrr should show 8 tools.
+3. In Claude Code, type `/mcp`. defrr should show 9 tools.
 
 ## Tools
 
@@ -22,12 +22,15 @@ Nothing you send is stored or logged.
 |---|---|---|
 | `defrr_create_contract` | New contract: terms in, month-by-month schedule out | 1 |
 | `defrr_create_waterfall` | Up to 50 contracts at once: each contract's billing, revenue and deferred balance by month, and the total | 1 per contract |
+| `defrr_process_renewal` | Renewals: the price change, the billing entry, the revised schedule, and what to post by month. A renewal processed after it started has its catch-up posted in the first open month | 1 per renewal |
+| `defrr_usage_billing` | What usage costs under flat, volume or prepaid-credit pricing, month by month, with any prepaid overage flagged | 1 per line |
 | `defrr_reprice_renewal` | Credit for a renewal priced too high | 2 |
 | `defrr_reprice_contract` | Credit for an original term priced too high | 2 |
 | `defrr_cancel_renewal` | Cancel the latest renewal | 2 |
 | `defrr_cancel_contract` | Cancel a whole contract | 2 |
-| `defrr_usage_billing` | What usage costs under flat, volume or prepaid-credit pricing, month by month, with any prepaid overage flagged | 1 per line (up to 50) |
 | `defrr_get_credit_balance` | Check your credits | Free |
+
+A call that fails is refunded.
 
 ## Try it
 
@@ -37,6 +40,13 @@ A new contract:
 > then a renewal from 1 Jan 2027 to 31 Dec 2027 at $18,000. End dates are included.
 > Recognise it smooth. Show me the terms and the month-by-month schedule.
 
+A renewal:
+
+> Use defrr to process a renewal, recognised smooth with end dates included. The contract ran
+> 1 Jan 2026 to 31 Dec 2026 at $12,000 and renews to 31 Dec 2027 at $18,000. Our books are
+> closed through March 2027. Show the price change, the billing entry, any catch-up, and what
+> to post by month.
+
 Usage:
 
 > Use defrr to price usage for two customers. Acme is on volume pricing: the first 100,000 units
@@ -44,6 +54,34 @@ Usage:
 > 80,000 in Feb 2026. Globex has prepaid credit: 100,000 units at $0.002 each. They used 70,000
 > units in Jan 2026 and 60,000 in Feb 2026. Show each month's revenue, the total by month, and
 > any overage.
+
+## Other clients
+
+Any MCP client that supports Streamable HTTP and custom headers can connect. Send your key
+either as `Authorization: Bearer dfr_live_YOUR_KEY` or as `X-API-Key: dfr_live_YOUR_KEY` (for
+tools that don't let you set `Authorization`). Never put a key in the web address.
+
+### LangChain
+
+LangChain connects to MCP servers through its
+[`langchain-mcp-adapters`](https://github.com/langchain-ai/langchain-mcp-adapters) package:
+
+```python
+from langchain_mcp_adapters.client import MultiServerMCPClient
+
+client = MultiServerMCPClient({
+    "defrr": {
+        "transport": "streamable_http",
+        "url": "https://defrr.com/v1/mcp",
+        "headers": {"X-API-Key": "dfr_live_YOUR_KEY"},
+    }
+})
+tools = await client.get_tools()
+```
+
+Keep your key in an environment variable rather than in the code. See LangChain's
+[MCP documentation](https://docs.langchain.com/oss/python/langchain/mcp) for how to use the
+tools in an agent.
 
 ## Larger sets
 
