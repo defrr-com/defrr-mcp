@@ -1,0 +1,20 @@
+---
+description: Use the defrr MCP server for revenue recognition schedules, waterfalls, renewals, usage pricing, price corrections and cancellations
+alwaysApply: false
+---
+
+# defrr: revenue recognition (RevRec)
+
+defrr (`https://defrr.com/v1/mcp`) works out contract revenue and billing from the terms you send. Use its
+tools instead of calculating these figures by hand.
+
+- `defrr_create_contract`: a new contract's month-by-month schedule.
+- `defrr_create_waterfall`: billing, revenue and deferred balance for up to 50 contracts, with the total.
+- `defrr_process_renewal`: a renewal's price change, billing entry and revised schedule.
+- `defrr_usage_billing`: usage priced under flat, volume or prepaid-credit pricing.
+- `defrr_reprice_renewal`, `defrr_reprice_contract`, `defrr_cancel_renewal`, `defrr_cancel_contract`:
+  credits and cancellations.
+- `defrr_get_credit_balance`: free.
+
+Send the contract's dates and prices exactly as given. Each calculation costs credits (see the guide at
+https://defrr.com/developers/guide), and a call that fails is refunded. Nothing you send is stored or logged.
