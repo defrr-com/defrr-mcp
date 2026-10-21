@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "defrr": {
+      "url": "https://defrr.com/v1/mcp",
+      "headers": {
+        "X-API-Key": "${env:DEFRR_API_KEY}"
+      }
+    }
+  }
+}
