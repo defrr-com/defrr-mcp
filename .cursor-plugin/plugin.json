@@ -1,7 +1,7 @@
 {
   "name": "defrr",
   "displayName": "defrr",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Revenue recognition schedules, waterfalls, renewals, repricing, cancellations and usage pricing for contracts, worked out by defrr's engine. Can also save contracts to your defrr organization as drafts.",
   "author": {
     "name": "defrr"
@@ -29,19 +29,6 @@
     "contracts",
     "mcp"
   ],
-  "variables": {
-    "type": "object",
-    "properties": {
-      "DEFRR_API_KEY": {
-        "type": "string",
-        "title": "defrr API key",
-        "description": "Create one at https://defrr.com/developers/account (40 free credits). Tick 'Save contracts in Defrr' on the key if you want to save contracts as drafts."
-      }
-    },
-    "required": [
-      "DEFRR_API_KEY"
-    ]
-  },
   "rules": "./rules/",
   "commands": "./commands/",
   "mcpServers": "./mcp.json"

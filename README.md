@@ -103,9 +103,38 @@ tools that don't let you set `Authorization`). Never put a key in the web addres
 
 ### Cursor
 
-This repository is laid out as a [Cursor plugin](https://cursor.com/docs/plugins): the defrr connection (`mcp.json`), a rule that tells the agent when to use defrr (`rules/defrr-revops.mdc`), and a `new-contract` command that steps you through saving a contract (`commands/new-contract.md`). Cursor asks for your API key (`DEFRR_API_KEY`) and sends it as `X-API-Key`.
+This repository is laid out as a [Cursor plugin](https://cursor.com/docs/plugins): the defrr connection (`mcp.json`, and the same file as `.mcp.json` for directories that look for that name), a rule that tells the agent when to use defrr (`rules/defrr-revops.mdc`), and a `new-contract` command that steps you through saving a contract (`commands/new-contract.md`).
 
-To use it before it is in Cursor's marketplace, copy this folder to `~/.cursor/plugins/local/defrr/` and reload Cursor. Or add the server by hand in Cursor's MCP settings: URL `https://defrr.com/v1/mcp`, header `X-API-Key: dfr_live_YOUR_KEY`. Keep the key out of version control.
+The connection reads your key from an environment variable called `DEFRR_API_KEY`, so the key never goes into a file. Create a key at https://defrr.com/developers/account, then set the variable once:
+
+- **macOS** (tested): in Terminal run
+
+  ```
+  launchctl setenv DEFRR_API_KEY dfr_live_YOUR_KEY
+  ```
+
+  Then quit Cursor completely (Cmd+Q) and open it again from the Dock or Applications folder, not by typing a command in Terminal. Cursor reads the variable when it starts, so reloading the window is not enough. The setting lasts until you restart your Mac: run the command again after a restart, or use the file-based setup below.
+- **Windows and Linux** (not tested): set a user environment variable named `DEFRR_API_KEY`, then quit and reopen Cursor.
+
+Then check Cursor's MCP settings: `defrr` should be ready and list its tools (9 for a key that only calculates, 12 or 14 for a key that can save contracts).
+
+To use the plugin before it is in Cursor's marketplace, copy this folder to `~/.cursor/plugins/local/defrr/` and reload Cursor.
+
+**If you would rather keep the key in a file**, or Cursor can't see the variable, it shows `defrr` as failed, often with `Unexpected token '<', "<!DOCTYPE"... is not valid JSON` in its MCP log. That message means the request reached defrr without a valid key. Add the server yourself in `~/.cursor/mcp.json` (or Cursor Settings, MCP):
+
+```json
+{
+  "mcpServers": {
+    "defrr": {
+      "type": "http",
+      "url": "https://defrr.com/v1/mcp",
+      "headers": { "X-API-Key": "dfr_live_YOUR_KEY" }
+    }
+  }
+}
+```
+
+Keep this file out of version control, and if you use the plugin as well, turn the plugin's own copy of the server off so the two don't clash.
 
 ### LangChain
 
