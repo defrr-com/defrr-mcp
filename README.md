@@ -101,6 +101,12 @@ Any MCP client that supports Streamable HTTP and custom headers can connect. Sen
 either as `Authorization: Bearer dfr_live_YOUR_KEY` or as `X-API-Key: dfr_live_YOUR_KEY` (for
 tools that don't let you set `Authorization`). Never put a key in the web address.
 
+### Cursor
+
+This repository is laid out as a [Cursor plugin](https://cursor.com/docs/plugins): the defrr connection (`mcp.json`), a rule that tells the agent when to use defrr (`rules/defrr-revops.mdc`), and a `new-contract` command that steps you through saving a contract (`commands/new-contract.md`). Cursor asks for your API key (`DEFRR_API_KEY`) and sends it as `X-API-Key`.
+
+To use it before it is in Cursor's marketplace, copy this folder to `~/.cursor/plugins/local/defrr/` and reload Cursor. Or add the server by hand in Cursor's MCP settings: URL `https://defrr.com/v1/mcp`, header `X-API-Key: dfr_live_YOUR_KEY`. Keep the key out of version control.
+
 ### LangChain
 
 LangChain connects to MCP servers through its
