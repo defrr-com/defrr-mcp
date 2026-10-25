@@ -1,7 +1,7 @@
 {
   "name": "defrr",
   "displayName": "defrr",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "description": "Revenue recognition schedules, waterfalls, renewals, repricing, cancellations and usage pricing for contracts, worked out by defrr's engine. Can also save contracts to your defrr organization as drafts.",
   "author": {
     "name": "defrr"
