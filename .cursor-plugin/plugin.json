@@ -1,5 +1,48 @@
 {
   "name": "defrr",
-  "description": "Revenue recognition (RevRec) schedules, waterfalls, renewals, credits, cancellations and usage pricing for contracts, from defrr's engine.",
-  "version": "1.2.0"
+  "displayName": "defrr",
+  "version": "1.0.0",
+  "description": "Revenue recognition schedules, waterfalls, renewals, repricing, cancellations and usage pricing for contracts, worked out by defrr's engine. Can also save contracts to your defrr organization as drafts.",
+  "author": {
+    "name": "defrr"
+  },
+  "homepage": "https://defrr.com/developers",
+  "repository": "https://github.com/defrr-com/defrr-mcp",
+  "license": "MIT",
+  "logo": "assets/logo.png",
+  "keywords": [
+    "defrr",
+    "revenue recognition",
+    "revrec",
+    "deferred revenue",
+    "contracts",
+    "renewals",
+    "billing",
+    "finance",
+    "mcp"
+  ],
+  "category": "integrations",
+  "tags": [
+    "finance",
+    "accounting",
+    "revenue",
+    "contracts",
+    "mcp"
+  ],
+  "variables": {
+    "type": "object",
+    "properties": {
+      "DEFRR_API_KEY": {
+        "type": "string",
+        "title": "defrr API key",
+        "description": "Create one at https://defrr.com/developers/account (40 free credits). Tick 'Save contracts in Defrr' on the key if you want to save contracts as drafts."
+      }
+    },
+    "required": [
+      "DEFRR_API_KEY"
+    ]
+  },
+  "rules": "./rules/",
+  "commands": "./commands/",
+  "mcpServers": "./mcp.json"
 }
