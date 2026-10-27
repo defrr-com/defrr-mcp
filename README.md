@@ -3,7 +3,7 @@
 Revenue recognition (RevRec) schedules, waterfalls, renewals, credits, cancellations and usage pricing for contracts, worked out by defrr's engine.
 Connect it to Claude Code and ask in plain English, or call it from your own code.
 
-The calculation tools store nothing, and nothing you send to them is logged. If you want, you can also switch on **saving contracts to your defrr organization** (see below). That is off by default and set per key.
+The calculation tools store nothing, and nothing you send to them is logged. If you want, you can also switch on **saving to your defrr organization** (see below): contracts and renewals are saved as drafts a person approves, and usage products can be set up. That is off by default and set per key.
 
 ## Connect
 
@@ -15,7 +15,7 @@ The calculation tools store nothing, and nothing you send to them is logged. If 
      --header "Authorization: Bearer dfr_live_YOUR_KEY"
    ```
 
-3. In Claude Code, type `/mcp`. defrr should show 9 tools for a key that only calculates, or 12 or 14 for a key that can also save contracts (see below).
+3. In Claude Code, type `/mcp`. defrr should show 9 tools for a key that only calculates, or 18 or 23 for a key that can also save contracts (see below).
 
 ## Tools
 
@@ -26,7 +26,7 @@ These calculate and store nothing. They work for every key.
 | `defrr_create_contract` | New contract: terms in, month-by-month schedule out. Saves nothing | 1 |
 | `defrr_create_waterfall` | Up to 50 contracts at once: each contract's billing, revenue and deferred balance by month, and the total | 1 per contract |
 | `defrr_process_renewal` | Renewals: the price change, the billing entry, the revised schedule, and what to post by month. A renewal processed after it started has its catch-up posted in the first open month | 1 per renewal |
-| `defrr_usage_billing` | What usage costs under flat, volume or prepaid-credit pricing, month by month, with any prepaid overage flagged | 1 per line |
+| `defrr_usage_billing` | What usage costs under flat, volume, prepaid-credit or fixed-fee-plus-overage pricing, month by month. Prepaid overage is flagged; a fixed fee's overage is priced and returned apart from revenue. Give a fixed-fee line a `startDate` and dated usage and its cycles follow the contract's anniversary: the fee is booked in the month each cycle starts and the overage in the month it ends. Stateless: your usage is calculated and returned, never stored | 1 per line |
 | `defrr_reprice_renewal` | Credit for a renewal priced too high | 2 |
 | `defrr_reprice_contract` | Credit for an original term priced too high | 2 |
 | `defrr_cancel_renewal` | Cancel the latest renewal | 2 |
@@ -35,9 +35,9 @@ These calculate and store nothing. They work for every key.
 
 A call that fails is refunded.
 
-## Saving contracts to defrr (optional)
+## Saving to defrr (optional)
 
-By default the tools above only calculate: the schedule comes back to you and nothing is kept. If you want contracts recorded in your defrr organization, create a key with **Save contracts in Defrr** ticked on your [developer account](https://defrr.com/developers/account). If you don't have a defrr workspace yet, the page sets up a small one for you (company name, base currency, how revenue is recognised and, if you like, the month your books are locked through). A key without that option can only calculate.
+By default the tools above only calculate: the schedule comes back to you and nothing is kept. If you want contracts and renewals recorded in your defrr organization, create a key with **Save contracts in Defrr** ticked on your [developer account](https://defrr.com/developers/account). If you don't have a defrr workspace yet, the page sets up a small one for you (company name, base currency, how revenue is recognised and, if you like, the month your books are locked through). A key without that option can only calculate.
 
 | Tool | What it does | Needs | Credits |
 |---|---|---|---|
@@ -46,10 +46,21 @@ By default the tools above only calculate: the schedule comes back to you and no
 | `defrr_get_workspace` | Shows the organization, its base currency and recognition model, its locked period, how many drafts are waiting, and when the key last connected | the save option | Free |
 | `defrr_approve_draft` | Makes a draft a live contract | the approve option | Free |
 | `defrr_reject_draft` | Discards a draft (it is kept as rejected) | the approve option | Free |
+| `defrr_save_renewal` | Saves a renewal for a contract already in the workspace as a draft: the contract is not changed until the renewal is approved. Works for contracts whose terms can be read as a schedule, and refuses a renewal that starts in a closed period | a save or approve key | 1 (a repeat is free) |
+| `defrr_list_renewal_drafts` | Lists renewal drafts waiting for approval, or already decided | a save or approve key | Free |
+| `defrr_approve_renewal_draft` | Adds a draft renewal to its contract as a new last term and recalculates its schedules | the approve option | Free |
+| `defrr_reject_renewal_draft` | Discards a draft renewal (it is kept as rejected) | the approve option | Free |
+| `defrr_find_contracts` | Finds a customer's contracts in the workspace by name | a save or approve key | Free |
+| `defrr_get_contract` | Reads one contract and returns its terms as a schedule the calculation tools take. Says what is in the way when a contract has features the calculators don't model | a save or approve key | Free |
+| `defrr_list_usage_products` | Lists the usage products already set up in the workspace | a save or approve key | Free |
+| `defrr_preview_usage_product` | Shows what sample customers would pay under a usage product (pay as you go, prepaid credits or fixed fee plus overage) before it exists. Saves nothing | a save or approve key | Free |
+| `defrr_create_usage_product` | Creates that usage product in the workspace (a new product only; existing ones are edited in defrr) | the approve option | Free |
 
 **A saved contract is a draft.** It isn't live, and no report reads it, until it is approved: in defrr under Contracts, Draft contracts, or by an agent whose key also has the approve option. Leave the approve option off for an agent you want a person to check. If a draft has revenue in months you have closed (your locked period in Organization details), or in months that have already ended, defrr says so before it is approved.
 
 **Repeats are safe.** Sending the same agreement again returns the draft already saved and costs nothing, while that draft is waiting or approved. If it was rejected, or its contract has since been deleted, the same terms save as a new draft. Send an `idempotencyKey` to save a separate deal with identical terms.
+
+**A saved renewal is a draft too.** When a customer renews, the agent finds the contract (`defrr_find_contracts`, then `defrr_get_contract`) and saves the renewal with `defrr_save_renewal`: the contract's id, the renewal's end date and the renewal term's total price. The contract does not change until the renewal is approved in defrr under Contracts, Draft renewals, or with `defrr_approve_renewal_draft` if the key may approve. Approving adds the renewal as a new last term and recalculates the contract's schedules. It only works on a contract whose terms can be read as a schedule (`defrr_get_contract` says why when it can't, for example monthly billing, a discount or a foreign currency), only after the contract's last end date, and it refuses a renewal that starts in a closed period: process that one in the app under Edit renewals.
 
 **What the agent is told.** When a session starts it learns which organization it is connected to, the last locked period, and when the key last connected. Only a person can change the locked period, in defrr under Organization details.
 
@@ -65,7 +76,9 @@ It asks for anything missing (customer, product, each term's dates and price, ho
 
 ### A developer workspace
 
-A workspace set up from the developer account page opens a few pages in the defrr app: the Dashboard, View all contracts, Draft contracts, the customer profile, and Organization details (the basic details, recognition model, base currency and locked period). The rest are subscription features and are shown greyed out.
+A workspace set up from the developer account page opens a few pages in the defrr app: the Dashboard, View all contracts, Draft contracts, Draft renewals, Usage products, the customer profile, and Organization details (the basic details, recognition model, base currency and locked period). The rest are subscription features and are shown greyed out.
+
+It also has an **Ask defrr** assistant, a button at the bottom right of every page. It uses these same tools and your credits, and can also prepare the cancellation of a contract, or of its latest renewal: it shows the figures on a card and nothing changes until you press Confirm. It cannot approve drafts.
 
 ## Try it
 
@@ -89,6 +102,11 @@ Usage:
 > 80,000 in Feb 2026. Globex has prepaid credit: 100,000 units at $0.002 each. They used 70,000
 > units in Jan 2026 and 60,000 in Feb 2026. Show each month's revenue, the total by month, and
 > any overage.
+
+Saving a renewal (needs a key with the save option):
+
+> Acme Pty Ltd renewed their Pro Plan to 31 Dec 2028 for $14,000. Find their contract and save the
+> renewal as a draft. Tell me which contract you used.
 
 Saving a contract (needs a key with the save option):
 
@@ -116,7 +134,7 @@ The connection reads your key from an environment variable called `DEFRR_API_KEY
   Then quit Cursor completely (Cmd+Q) and open it again from the Dock or Applications folder, not by typing a command in Terminal. Cursor reads the variable when it starts, so reloading the window is not enough. The setting lasts until you restart your Mac: run the command again after a restart, or use the file-based setup below.
 - **Windows and Linux** (not tested): set a user environment variable named `DEFRR_API_KEY`, then quit and reopen Cursor.
 
-Then check Cursor's MCP settings: `defrr` should be ready and list its tools (9 for a key that only calculates, 12 or 14 for a key that can save contracts).
+Then check Cursor's MCP settings: `defrr` should be ready and list its tools (9 for a key that only calculates, 18 or 23 for a key that can save contracts).
 
 To use the plugin before it is in Cursor's marketplace, copy this folder to `~/.cursor/plugins/local/defrr/` and reload Cursor.
 
@@ -168,7 +186,7 @@ script that writes two CSV files.
 
 ## Privacy
 
-The calculation tools work from what you send in each request and keep nothing about it. The one exception is saving contracts, which you switch on per key: a key with **Save contracts in Defrr** stores the contract you send (customer, product, dates and prices) as a draft in your own defrr organization.
+The calculation tools work from what you send in each request and keep nothing about it. The one exception is saving, which you switch on per key: a key with **Save contracts in Defrr** stores the contracts and renewals you send (customer, product, dates and prices) as drafts in your own defrr organization, and the usage products you create there.
 
 ## Docs and limits
 

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.defrr/defrr",
+  "description": "RevRec schedules, renewals, credits, usage pricing. Can save contracts and renewals as drafts.",
+  "title": "defrr",
+  "repository": {
+    "url": "https://github.com/defrr-com/defrr-mcp",
+    "source": "github"
+  },
+  "version": "1.3.0",
+  "websiteUrl": "https://defrr.com/developers",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://defrr.com/v1/mcp",
+      "headers": [
+        {
+          "description": "Your defrr API key as a bearer token: Bearer dfr_live_...",
+          "isRequired": true,
+          "isSecret": true,
+          "name": "Authorization"
+        }
+      ]
+    }
+  ]
+}

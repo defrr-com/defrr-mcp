@@ -1,5 +1,5 @@
 ---
-description: Use the defrr MCP tools for revenue recognition, deferred revenue, contract schedules, renewals, repricing, cancellations, usage billing, and saving contracts to defrr.
+description: Use the defrr MCP tools for revenue recognition, deferred revenue, contract schedules, renewals, repricing, cancellations, usage billing, and saving contracts and renewals to defrr.
 alwaysApply: false
 ---
 
@@ -13,6 +13,10 @@ Use the defrr MCP tools for anything about a contract's revenue, billing or defe
 - A renewal: `defrr_process_renewal`. A price correction or credit: `defrr_reprice_contract` (original term) or `defrr_reprice_renewal` (latest renewal). A cancellation: `defrr_cancel_contract` or `defrr_cancel_renewal`.
 - What usage costs: `defrr_usage_billing`.
 - To **create, save or record** a contract in the user's defrr organization: `defrr_save_contract`, if it is available. It saves a **draft**. Say which organization it went to, and that it stays a draft until it is approved in defrr (Contracts, Draft contracts) or with `defrr_approve_draft` if the key may approve. If the user wants to be stepped through it, they can run the `new-contract` command.
+- When the user names an existing customer, read their contract with `defrr_find_contracts` and `defrr_get_contract` and use the `schedule` it returns, rather than asking for terms you can read. If it returns no schedule, say why and ask only for what is missing. If several contracts match, ask which.
+- To **process a renewal** for a contract already in the organization: `defrr_save_renewal` with the contract's id, the renewal's end date and the renewal term's total price (not an increase). It saves a **draft renewal**: the contract is not changed until it is approved in defrr (Contracts, Draft renewals) or with `defrr_approve_renewal_draft` if the key may approve. If it refuses (the contract can't be read as a schedule, or the renewal starts in a closed period), say why: the person does it in the app under Edit renewals. `defrr_process_renewal` only works out what a renewal would do.
+- Cancelling for real is not done through these tools: `defrr_cancel_contract` and `defrr_cancel_renewal` only work out what a cancellation would do. The person cancels in defrr (the in-app assistant can prepare it for them to confirm).
+- To set up a product billed by usage: `defrr_list_usage_products` first (do not duplicate one), then `defrr_preview_usage_product` and show the user what sample customers would pay, then `defrr_create_usage_product` once they confirm the name, SKU, currency and prices (it needs a key with the approve option and cannot change an existing product).
 - `defrr_get_workspace` shows the connected organization, its base currency, its recognition model, its locked period and how many drafts are waiting.
 
 ## Terms and dates
