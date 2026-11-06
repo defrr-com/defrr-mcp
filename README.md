@@ -15,7 +15,7 @@ The calculation tools store nothing, and nothing you send to them is logged. If 
      --header "Authorization: Bearer dfr_live_YOUR_KEY"
    ```
 
-3. In Claude Code, type `/mcp`. defrr should show 9 tools for a key that only calculates, or 18 or 23 for a key that can also save contracts (see below).
+3. In Claude Code, type `/mcp`. defrr should show 9 tools for a key that only calculates, or 19 or 24 for a key that can also save contracts (see below).
 
 ## Tools
 
@@ -23,7 +23,7 @@ These calculate and store nothing. They work for every key.
 
 | Tool | What it does | Credits |
 |---|---|---|
-| `defrr_create_contract` | New contract: terms in, month-by-month schedule out. Saves nothing | 1 |
+| `defrr_create_contract` | New contract: terms in, month-by-month schedule out. Saves nothing. Takes `currency` and `exchangeRate` for a deal priced in a foreign currency, and `lockedThrough` for a back-dated contract | 1 |
 | `defrr_create_waterfall` | Up to 50 contracts at once: each contract's billing, revenue and deferred balance by month, and the total | 1 per contract |
 | `defrr_process_renewal` | Renewals: the price change, the billing entry, the revised schedule, and what to post by month. A renewal processed after it started has its catch-up posted in the first open month | 1 per renewal |
 | `defrr_usage_billing` | What usage costs under flat, volume, prepaid-credit or fixed-fee-plus-overage pricing, month by month. Prepaid overage is flagged; a fixed fee's overage is priced and returned apart from revenue. Give a fixed-fee line a `startDate` and dated usage and its cycles follow the contract's anniversary: the fee is booked in the month each cycle starts and the overage in the month it ends. Stateless: your usage is calculated and returned, never stored | 1 per line |
@@ -41,7 +41,8 @@ By default the tools above only calculate: the schedule comes back to you and no
 
 | Tool | What it does | Needs | Credits |
 |---|---|---|---|
-| `defrr_save_contract` | Saves a contract as a **draft** and works out its schedule | the save option | 1 (a repeat is free) |
+| `defrr_save_contract` | Saves a contract as a **draft** and works out its schedule. Pass `backdated: true` for a contract that started in closed months: they are caught up in the first open month, as the app does | the save option | 1 (a repeat is free) |
+| `defrr_get_exchange_rate` | defrr's daily exchange rate between two currencies, for a contract priced in a foreign currency | the save option | Free |
 | `defrr_list_drafts` | Lists the drafts waiting for approval, or already decided | the save option | Free |
 | `defrr_get_workspace` | Shows the organization, its base currency and recognition model, its locked period, how many drafts are waiting, and when the key last connected | the save option | Free |
 | `defrr_approve_draft` | Makes a draft a live contract | the approve option | Free |
@@ -58,9 +59,13 @@ By default the tools above only calculate: the schedule comes back to you and no
 
 **A saved contract is a draft.** It isn't live, and no report reads it, until it is approved: in defrr under Contracts, Draft contracts, or by an agent whose key also has the approve option. Leave the approve option off for an agent you want a person to check. If a draft has revenue in months you have closed (your locked period in Organization details), or in months that have already ended, defrr says so before it is approved.
 
+**Foreign currency.** For a deal priced in another currency, send `currency` (such as EUR) and the term prices in it. Prices are converted to your organization's base currency at the `exchangeRate` you give (how much of your currency one unit of the foreign currency is worth), or at defrr's daily rate for the start date if you leave it out (`defrr_get_exchange_rate` shows it). If there is no rate the save is refused: a rate of 1 is never assumed. The draft keeps the foreign price, currency and rate, and renewals and corrections on that contract are made in its own currency.
+
+**Back-dated contracts.** If a contract started in months your organization has already closed, save it with `backdated: true` (or, to see the effect without saving, pass `lockedThrough` to `defrr_create_contract`). The months from the start through the locked period are caught up together in the first open month, the way the defrr app does it, and the invoice is posted there too, so no closed month changes. It works with foreign currency and with renewals. A single term needs a quantity of 1, and the contract must run past the locked month. The result says how much lands in which month.
+
 **Repeats are safe.** Sending the same agreement again returns the draft already saved and costs nothing, while that draft is waiting or approved. If it was rejected, or its contract has since been deleted, the same terms save as a new draft. Send an `idempotencyKey` to save a separate deal with identical terms.
 
-**A saved renewal is a draft too.** When a customer renews, the agent finds the contract (`defrr_find_contracts`, then `defrr_get_contract`) and saves the renewal with `defrr_save_renewal`: the contract's id, the renewal's end date and the renewal term's total price. The contract does not change until the renewal is approved in defrr under Contracts, Draft renewals, or with `defrr_approve_renewal_draft` if the key may approve. Approving adds the renewal as a new last term and recalculates the contract's schedules. It only works on a contract whose terms can be read as a schedule (`defrr_get_contract` says why when it can't, for example monthly billing, a discount or a foreign currency), only after the contract's last end date, and it refuses a renewal that starts in a closed period: process that one in the app under Edit renewals.
+**A saved renewal is a draft too.** When a customer renews, the agent finds the contract (`defrr_find_contracts`, then `defrr_get_contract`) and saves the renewal with `defrr_save_renewal`: the contract's id, the renewal's end date and the renewal term's total price. The contract does not change until the renewal is approved in defrr under Contracts, Draft renewals, or with `defrr_approve_renewal_draft` if the key may approve. Approving adds the renewal as a new last term and recalculates the contract's schedules. It only works on a contract whose terms can be read as a schedule (`defrr_get_contract` says why when it can't, for example monthly billing, a discount or adjustments recorded against it), only after the contract's last end date, and it refuses a renewal that starts in a closed period: process that one in the app under Edit renewals.
 
 **What the agent is told.** When a session starts it learns which organization it is connected to, the last locked period, and when the key last connected. Only a person can change the locked period, in defrr under Organization details.
 
@@ -134,7 +139,7 @@ The connection reads your key from an environment variable called `DEFRR_API_KEY
   Then quit Cursor completely (Cmd+Q) and open it again from the Dock or Applications folder, not by typing a command in Terminal. Cursor reads the variable when it starts, so reloading the window is not enough. The setting lasts until you restart your Mac: run the command again after a restart, or use the file-based setup below.
 - **Windows and Linux** (not tested): set a user environment variable named `DEFRR_API_KEY`, then quit and reopen Cursor.
 
-Then check Cursor's MCP settings: `defrr` should be ready and list its tools (9 for a key that only calculates, 18 or 23 for a key that can save contracts).
+Then check Cursor's MCP settings: `defrr` should be ready and list its tools (9 for a key that only calculates, 19 or 24 for a key that can save contracts).
 
 To use the plugin before it is in Cursor's marketplace, copy this folder to `~/.cursor/plugins/local/defrr/` and reload Cursor.
 

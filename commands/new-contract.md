@@ -12,6 +12,8 @@ What you need before saving:
 - the customer's name and the product or plan;
 - for each term, its start date, end date and price (the original term first, then any renewals);
 - whether revenue is recognised `exact` (per day) or `smooth` (equal months). If I don't say, use the organization's default (`exact` is `exact`, `advance` is `smooth`) and tell me which you used;
+- if the deal is priced in a foreign currency: the currency and the exchange rate (if I don't give one, look up defrr's daily rate with `defrr_get_exchange_rate`, tell me the rate and its date, and confirm it. Never assume a rate of 1);
+- if the contract started in months that are already closed (on or before the locked period): say so, and save it with `backdated: true` so the closed months are caught up in the first open month;
 - if I have them: a reference (a PO or quote number) and where the terms came from.
 
 Rules:

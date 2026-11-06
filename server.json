@@ -1,7 +1,7 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "com.defrr/defrr",
-  "description": "RevRec schedules, renewals, credits, usage pricing. Can save contracts and renewals as drafts.",
+  "description": "RevRec schedules, renewals, credits, usage pricing, multi-currency, back-dated. Saves drafts.",
   "title": "defrr",
   "repository": {
     "url": "https://github.com/defrr-com/defrr-mcp",
