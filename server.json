@@ -7,8 +7,17 @@
     "url": "https://github.com/defrr-com/defrr-mcp",
     "source": "github"
   },
-  "version": "1.4.0",
+  "version": "1.4.1",
   "websiteUrl": "https://defrr.com/developers",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/defrr-com/defrr-mcp/main/assets/logo.png",
+      "mimeType": "image/png",
+      "sizes": [
+        "967x908"
+      ]
+    }
+  ],
   "remotes": [
     {
       "type": "streamable-http",

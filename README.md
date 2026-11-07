@@ -35,6 +35,8 @@ These calculate and store nothing. They work for every key.
 
 A call that fails is refunded.
 
+**No key needed to look.** Without a key, a client can open a session and list the 9 calculation tools above, so you can see what defrr does before signing up. Every tool call, and anything else, still needs a key.
+
 ## Saving to defrr (optional)
 
 By default the tools above only calculate: the schedule comes back to you and nothing is kept. If you want contracts and renewals recorded in your defrr organization, create a key with **Save contracts in Defrr** ticked on your [developer account](https://defrr.com/developers/account). If you don't have a defrr workspace yet, the page sets up a small one for you (company name, base currency, how revenue is recognised and, if you like, the month your books are locked through). A key without that option can only calculate.
