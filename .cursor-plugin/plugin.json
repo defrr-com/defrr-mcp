@@ -1,8 +1,8 @@
 {
   "name": "defrr",
   "displayName": "defrr",
-  "version": "1.6.0",
-  "description": "Revenue recognition schedules, waterfalls, renewals, repricing, cancellations and usage pricing for contracts, worked out by defrr's engine. Can also, with a key that allows it, save contracts and renewals to your defrr organization as drafts for a person to approve, read a customer's contracts, and set up usage products.",
+  "version": "1.7.0",
+  "description": "Revenue recognition schedules, waterfalls, renewals, repricing, cancellations and usage pricing for contracts, worked out by defrr's engine. Can also, with a key that allows it, save contracts and renewals to your defrr organization as drafts for a person to approve, read a customer's contracts, and set up usage products. Handles deals in foreign currencies and back-dated contracts.",
   "author": {
     "name": "defrr"
   },
