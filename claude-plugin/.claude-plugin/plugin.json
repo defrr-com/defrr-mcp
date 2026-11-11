@@ -1,7 +1,7 @@
 {
   "name": "defrr",
   "displayName": "defrr",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Revenue recognition for contracts, worked out by defrr's engine: schedules, waterfalls, renewals, price corrections, cancellations and usage pricing, in your base currency or a foreign one, including back-dated contracts. With a key that allows it, also saves contracts and renewals to your defrr organization as drafts for a person to approve.",
   "author": {
     "name": "defrr",
@@ -13,6 +13,7 @@
   "keywords": ["revenue recognition", "revrec", "deferred revenue", "ASC 606", "IFRS 15", "contracts", "renewals", "billing", "finance", "mcp"],
   "documentationUrl": "https://defrr.com/developers/guide",
   "privacyPolicyUrl": "https://defrr.com/privacy",
+  "termsOfServiceUrl": "https://defrr.com/terms",
   "supportUrl": "https://defrr.com/contact",
   "userConfig": {
     "api_key": {
