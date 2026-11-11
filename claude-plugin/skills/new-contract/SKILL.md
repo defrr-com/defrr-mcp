@@ -14,7 +14,7 @@ What you need before saving:
 - for each term, its start date, end date and price (the original term first, then any renewals);
 - whether revenue is recognised `exact` (per day) or `smooth` (equal months). If I don't say, use the organization's default (`exact` is `exact`, `advance` is `smooth`) and tell me which you used;
 - if the deal is priced in a foreign currency: the currency and the exchange rate (if I don't give one, look up defrr's daily rate with `defrr_get_exchange_rate`, tell me the rate and its date, and confirm it. Never assume a rate of 1);
-- if the contract started in months that are already closed (on or before the locked period): say so, and save it with `backdated: true` so the closed months are caught up in the first open month;
+- if the contract starts on or before the locked period: do not decide for me. Ask: "This is a back-dated contract, as your books are locked through <month>. Do you want a back-dated adjustment calculated?" If I say yes, save it with `backdated: true` so the closed months are caught up in the first open month. If no, save it without;
 - if I have them: a reference (a PO or quote number) and where the terms came from.
 
 Rules:
@@ -22,4 +22,4 @@ Rules:
 1. Ask me for anything that is missing or unclear, one short question at a time. Do not guess dates or prices.
 2. If the dates run like 1 Jan to 31 Dec, the end date is the last day of the term (`endDateIncluded: true`). Ask me if you can't tell.
 3. Before you save, read the terms back as a short list and wait for me to confirm.
-4. After saving, tell me which organization it was saved to, the draft ID, the total price, the first and last revenue month, and any warning about closed or past months (`inThePast`). Remind me that it stays a draft until it is approved in defrr under Contracts, Draft contracts, or with `defrr_approve_draft` if my key can approve.
+4. After saving, tell me which organization it was saved to, the draft ID, the total price, the first and last revenue month, and any warning about closed or past months (`inThePast`). Remind me that it stays a draft until it is approved in defrr under Contracts, Draft contracts, or with `defrr_approve_draft` if my key can approve. Show me the month-by-month schedule from the save result; do not run `defrr_create_contract` as well, because that costs a second credit.

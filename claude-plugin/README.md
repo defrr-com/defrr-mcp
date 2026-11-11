@@ -21,6 +21,7 @@ Then, in Claude Code, run `/plugin configure defrr@defrr` and paste your defrr A
   - `/defrr:price-correction` works out the credit when a contract or renewal was priced too high (calculates only).
   - `/defrr:cancellation` shows what cancelling a contract or its latest renewal would do (calculates only).
   - `/defrr:recognition-schedules` shows billing, revenue and the deferred balance month by month for one or more contracts, with a total.
+  - `/defrr:help` lists these commands and when to use each (free: it calls no tool).
 
 ## Data handling
 
