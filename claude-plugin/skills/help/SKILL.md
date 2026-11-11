@@ -1,6 +1,6 @@
 ---
 name: help
-description: List what the defrr commands do and when to use each one. Free: it calls no tool.
+description: "List what the defrr commands do and when to use each one. Free: it calls no tool."
 disable-model-invocation: true
 ---
 

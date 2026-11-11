@@ -1,6 +1,6 @@
 ---
 name: renewal
-description: Save a customer's renewal to defrr as a draft. Finds their contract, asks for the new end date and price, reads it back for you to confirm, then saves it.
+description: "Save a customer's renewal to defrr as a draft. Finds their contract, asks for the new end date and price, reads it back for you to confirm, then saves it."
 ---
 
 Save a renewal for a contract that is already in defrr, using the `defrr_save_renewal` tool. This needs an API key with **Save contracts in Defrr** ticked. If the tool isn't available, say so and point to https://defrr.com/developers/account.

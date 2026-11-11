@@ -1,6 +1,6 @@
 ---
 name: help
-description: List what the defrr commands do and when to use each one. Free: it calls no tool.
+description: "List what the defrr commands do and when to use each one. Free: it calls no tool."
 ---
 
 Show me this list and nothing else. Do not call any tool, so it costs no credits. If I have asked about a particular task, say which command fits it.

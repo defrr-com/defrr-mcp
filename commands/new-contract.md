@@ -1,6 +1,6 @@
 ---
 name: new-contract
-description: Save a new contract to your defrr organization as a draft. Asks for anything missing, reads the terms back for you to confirm, then saves it.
+description: "Save a new contract to your defrr organization as a draft. Asks for anything missing, reads the terms back for you to confirm, then saves it."
 ---
 
 Save a new contract to defrr as a draft, using the `defrr_save_contract` tool (not `defrr_create_contract`). This needs an API key with **Save contracts in Defrr** ticked. If the tool isn't available, say so and point to https://defrr.com/developers/account.

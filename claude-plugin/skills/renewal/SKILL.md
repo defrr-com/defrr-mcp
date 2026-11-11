@@ -1,6 +1,6 @@
 ---
 name: renewal
-description: Save a customer's renewal to defrr as a draft. Finds their contract, asks for the new end date and price, reads it back for you to confirm, then saves it.
+description: "Save a customer's renewal to defrr as a draft. Finds their contract, asks for the new end date and price, reads it back for you to confirm, then saves it."
 disable-model-invocation: true
 ---
 

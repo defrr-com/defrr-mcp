@@ -1,6 +1,6 @@
 ---
 name: defrr-revops
-description: Use the defrr MCP tools for revenue recognition, deferred revenue, contract schedules, renewals, repricing, cancellations, usage billing, and saving contracts and renewals to defrr.
+description: "Use the defrr MCP tools for revenue recognition, deferred revenue, contract schedules, renewals, repricing, cancellations, usage billing, and saving contracts and renewals to defrr."
 ---
 
 # defrr: revenue recognition and contracts

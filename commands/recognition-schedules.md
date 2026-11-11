@@ -1,6 +1,6 @@
 ---
 name: recognition-schedules
-description: Show the month-by-month billing, revenue and deferred revenue balance for one or more contracts, with a total across them. Asks for the contracts, then works out the schedules.
+description: "Show the month-by-month billing, revenue and deferred revenue balance for one or more contracts, with a total across them. Asks for the contracts, then works out the schedules."
 ---
 
 Work out revenue recognition schedules for one or more contracts: for each contract and for all of them together, every month's billing, revenue and ending deferred revenue balance (opening deferred balance + billing - revenue = ending). Use `defrr_create_waterfall` for several contracts (up to 50 in one call, 1 credit per contract) or `defrr_create_contract` for a single contract. These only calculate: nothing is stored.

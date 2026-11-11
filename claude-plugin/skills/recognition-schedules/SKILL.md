@@ -1,6 +1,6 @@
 ---
 name: recognition-schedules
-description: Show the month-by-month billing, revenue and deferred revenue balance for one or more contracts, with a total across them. Asks for the contracts, then works out the schedules.
+description: "Show the month-by-month billing, revenue and deferred revenue balance for one or more contracts, with a total across them. Asks for the contracts, then works out the schedules."
 disable-model-invocation: true
 ---
 

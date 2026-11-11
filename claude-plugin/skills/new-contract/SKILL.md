@@ -1,6 +1,6 @@
 ---
 name: new-contract
-description: Save a new contract to your defrr organization as a draft. Asks for anything missing, reads the terms back for you to confirm, then saves it.
+description: "Save a new contract to your defrr organization as a draft. Asks for anything missing, reads the terms back for you to confirm, then saves it."
 disable-model-invocation: true
 ---
 

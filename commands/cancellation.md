@@ -1,6 +1,6 @@
 ---
 name: cancellation
-description: Work out what cancelling a contract, or its latest renewal, would do: the credit note and the revenue reversed, month by month. Only calculates; nothing is cancelled.
+description: "Work out what cancelling a contract, or its latest renewal, would do: the credit note and the revenue reversed, month by month. Only calculates; nothing is cancelled."
 ---
 
 Work out what a cancellation would do using `defrr_cancel_contract` (a whole contract) or `defrr_cancel_renewal` (the latest renewal, in full). These only calculate. **Nothing is cancelled**: the person cancels in defrr. Each call costs 2 credits, refunded if it fails.

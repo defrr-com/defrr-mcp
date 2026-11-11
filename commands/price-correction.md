@@ -1,6 +1,6 @@
 ---
 name: price-correction
-description: Work out the credit note when a contract or a renewal was priced too high, and what happens to revenue month by month. Only calculates; nothing in defrr is changed.
+description: "Work out the credit note when a contract or a renewal was priced too high, and what happens to revenue month by month. Only calculates; nothing in defrr is changed."
 ---
 
 Work out a price correction (a credit for a price that was too high) using `defrr_reprice_contract` for the original term, or `defrr_reprice_renewal` for the latest renewal. These only calculate: nothing is saved or posted. Each call costs 2 credits, refunded if it fails.
