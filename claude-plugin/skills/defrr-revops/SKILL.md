@@ -1,0 +1,39 @@
+---
+name: defrr-revops
+description: Use the defrr MCP tools for revenue recognition, deferred revenue, contract schedules, renewals, repricing, cancellations, usage billing, and saving contracts and renewals to defrr.
+---
+
+# defrr: revenue recognition and contracts
+
+Use the defrr MCP tools for anything about a contract's revenue, billing or deferred balance. Do not work schedules out by hand or in a spreadsheet: defrr's engine is the source of truth, and its answers add up (billed, recognised and deferred all balance).
+
+## Which tool
+
+- A new deal's schedule, saving nothing: `defrr_create_contract`. Several contracts at once, with a total: `defrr_create_waterfall`.
+- A renewal: `defrr_process_renewal`. A price correction or credit: `defrr_reprice_contract` (original term) or `defrr_reprice_renewal` (latest renewal). A cancellation: `defrr_cancel_contract` or `defrr_cancel_renewal`.
+- What usage costs: `defrr_usage_billing`.
+- To **create, save or record** a contract in the user's defrr organization: `defrr_save_contract`, if it is available. It saves a **draft**. Say which organization it went to, and that it stays a draft until it is approved in defrr (Contracts, Draft contracts) or with `defrr_approve_draft` if the key may approve. If the user wants to be stepped through it, they can run `/defrr:new-contract`.
+- When the user names an existing customer, read their contract with `defrr_find_contracts` and `defrr_get_contract` and use the `schedule` it returns, rather than asking for terms you can read. If it returns no schedule, say why and ask only for what is missing. If several contracts match, ask which.
+- To **process a renewal** for a contract already in the organization: `defrr_save_renewal` with the contract's id, the renewal's end date and the renewal term's total price (not an increase). It saves a **draft renewal**: the contract is not changed until it is approved in defrr (Contracts, Draft renewals) or with `defrr_approve_renewal_draft` if the key may approve. If it refuses (the contract can't be read as a schedule, or the renewal starts in a closed period), say why: the person does it in the app under Edit renewals. `defrr_process_renewal` only works out what a renewal would do.
+- Cancelling for real is not done through these tools: `defrr_cancel_contract` and `defrr_cancel_renewal` only work out what a cancellation would do. The person cancels in defrr (the in-app assistant can prepare it for them to confirm).
+- To set up a product billed by usage: `defrr_list_usage_products` first (do not duplicate one), then `defrr_preview_usage_product` and show the user what sample customers would pay, then `defrr_create_usage_product` once they confirm the name, SKU, currency and prices (it needs a key with the approve option and cannot change an existing product).
+- A deal priced in a foreign currency: send `currency` (such as EUR) and the term prices in it to `defrr_save_contract` or `defrr_create_contract`. Use the exchange rate the user gives. Otherwise call `defrr_get_exchange_rate` for the contract's start date, tell the user the rate and its date, and confirm it before saving. If there is no rate, ask: never assume 1.
+- A contract that started in months the books have already closed (on or before the locked period): save it with `backdated: true`, or pass `lockedThrough` to `defrr_create_contract` to show the effect. The closed months are caught up in the first open month. Tell the user how much lands in which month. It needs a single term with quantity 1, or renewals.
+- `defrr_get_workspace` shows the connected organization, its base currency, its recognition model, its locked period and how many drafts are waiting.
+
+## Terms and dates
+
+- Never guess dates, prices or whether an end date is included. Ask. Dates that run like 1 Jan to 31 Dec mean the end date is the last day of the term (`endDateIncluded: true`).
+- `recognition` is `exact` (per day) or `smooth` (equal months). The organization's own setting is called `exact` or `advance`: `advance` means `smooth`.
+- Send the price of each term, the original term first and then any renewals. A term longer than 12 months with no renewal isn't supported yet: list it as terms of 12 months or less.
+
+## Closed months
+
+- When you reprice, cancel or renew, pass `lockedThrough` (YYYY-MM), the latest month the books are closed for. If you are connected to an organization, use its locked period. Otherwise ask the user. Revenue in a closed month is never changed: defrr posts the difference in the next open month.
+- Only a person changes the locked period, in defrr under Organization details.
+
+## Credits and keys
+
+- Each calculation costs credits (shown on the tool). A failed call is refunded. Check `defrr_get_credit_balance` before a large run.
+- For hundreds of contracts, call the REST API from a script instead of sending them through the model.
+- Never write the API key into a file, a commit or a chat. It is entered once when the plugin is enabled and kept in secure storage.

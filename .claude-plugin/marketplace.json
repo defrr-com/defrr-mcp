@@ -1,0 +1,15 @@
+{
+  "name": "defrr",
+  "description": "defrr's revenue recognition tools for Claude Code",
+  "owner": {
+    "name": "defrr",
+    "url": "https://defrr.com"
+  },
+  "plugins": [
+    {
+      "name": "defrr",
+      "source": "./claude-plugin",
+      "description": "Revenue recognition schedules, renewals, price corrections, cancellations, usage pricing, foreign currency and back-dated contracts, worked out by defrr's engine."
+    }
+  ]
+}

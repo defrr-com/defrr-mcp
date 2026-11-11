@@ -17,6 +17,17 @@ The calculation tools store nothing, and nothing you send to them is logged. If 
 
 3. In Claude Code, type `/mcp`. defrr should show 9 tools for a key that only calculates, or 19 or 24 for a key that can also save contracts (see below).
 
+## Claude Code plugin
+
+Install defrr as a Claude Code plugin: it adds the tools, a skill that tells Claude when to use them, and a `/defrr:new-contract` command. After installing, run `/plugin configure defrr@defrr` in Claude Code and paste your API key: it is kept in secure storage.
+
+```
+claude plugin marketplace add defrr-com/defrr-mcp
+claude plugin install defrr@defrr
+```
+
+On Claude Code 2.1.275 or later, one line does both: `/plugin install defrr --marketplace defrr-com/defrr-mcp`.
+
 ## Tools
 
 These calculate and store nothing. They work for every key.
