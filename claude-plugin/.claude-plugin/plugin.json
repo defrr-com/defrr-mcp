@@ -1,7 +1,7 @@
 {
   "name": "defrr",
   "displayName": "defrr",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Revenue recognition for contracts, worked out by defrr's engine: schedules, waterfalls, renewals, price corrections, cancellations and usage pricing, in your base currency or a foreign one, including back-dated contracts. With a key that allows it, also saves contracts and renewals to your defrr organization as drafts for a person to approve.",
   "author": {
     "name": "defrr",

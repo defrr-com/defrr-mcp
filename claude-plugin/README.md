@@ -15,7 +15,12 @@ Then, in Claude Code, run `/plugin configure defrr@defrr` and paste your defrr A
 
 - The defrr tools: create a contract, build a waterfall, process a renewal, correct a price, cancel a contract or renewal, price usage, and (with a saving key) save drafts, read a customer's contracts and set up usage products.
 - A skill that tells Claude when to use them and how to ask for missing dates and prices.
-- `/defrr:new-contract`, which asks for anything missing, reads the terms back and saves a draft.
+- Guided commands that ask for anything missing, read the terms back and then act:
+  - `/defrr:new-contract` saves a new contract as a draft.
+  - `/defrr:renewal` finds a customer's contract and saves a renewal as a draft.
+  - `/defrr:price-correction` works out the credit when a contract or renewal was priced too high (calculates only).
+  - `/defrr:cancellation` shows what cancelling a contract or its latest renewal would do (calculates only).
+  - `/defrr:recognition-schedules` shows billing, revenue and the deferred balance month by month for one or more contracts, with a total.
 
 ## Data handling
 

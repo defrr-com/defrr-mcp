@@ -19,7 +19,7 @@ The calculation tools store nothing, and nothing you send to them is logged. If 
 
 ## Claude Code plugin
 
-Install defrr as a Claude Code plugin: it adds the tools, a skill that tells Claude when to use them, and a `/defrr:new-contract` command. After installing, run `/plugin configure defrr@defrr` in Claude Code and paste your API key: it is kept in secure storage.
+Install defrr as a Claude Code plugin: it adds the tools, a skill that tells Claude when to use them, and guided commands: `/defrr:new-contract`, `/defrr:renewal`, `/defrr:price-correction`, `/defrr:cancellation` and `/defrr:recognition-schedules`. After installing, run `/plugin configure defrr@defrr` in Claude Code and paste your API key: it is kept in secure storage.
 
 ```
 claude plugin marketplace add defrr-com/defrr-mcp
